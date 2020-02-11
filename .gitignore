@@ -1,7 +1,7 @@
-./data/*
-./UD_French-ParTUT/*
-./embeddings/*
-./evaluations/*
-./model/*
-./output/*
-./radam.py
+data/*
+UD_French-ParTUT/*
+embeddings/*
+evaluations/*
+model/*
+output/*
+radam.py
