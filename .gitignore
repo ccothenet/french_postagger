@@ -1,6 +1,7 @@
 data/*
 UD_French-ParTUT/*
-embeddings/*
+embeddings/fr*
+embeddings/w2v*
 evaluations/*
 model/*
 output/*

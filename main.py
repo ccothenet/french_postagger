@@ -2,6 +2,7 @@
 import numpy as np
 import json
 import os
+import time
 
 from keras.models import load_model
 from tensorflow import keras
@@ -35,6 +36,8 @@ if __name__ == "__main__":
         ReduceLROnPlateau = ReduceLROnPlateau(monitor='val_loss', factor=0.5,
                           patience=5, min_lr=0.001, verbose=1)
         # Train the model
+        time_begin = time.time()
+
         history = model.fit(X_train,
                             y_train,
                             batch_size=8,
@@ -42,22 +45,26 @@ if __name__ == "__main__":
                             validation_data=[X_dev, y_dev],
                             verbose=1,
                             callbacks=[ReduceLROnPlateau, ModelCheckpoint])
-
+        time_train = time.time()
         print(history.history)
         print(type(history.history))
         # Evaluate model
         score = model.evaluate(X_test, y_test, batch_size=8)
         print("Evaluation score : {}".format(score))
+        time_evaluation = time.time()
 
-
+        print("Time training : {}".format(time_train - time_begin))
+        print("Time evaluation : {}".format(time_evaluation - time_train))
         # Save model options
         with open(options.output_dir + "options_dict.json",
                   "w+") as wfile:
             json.dump(options.__dict__, wfile)
 
-
+        hist = history.history
+        hist["time_training"] = time_train - time_begin
+        hist["time_evaluation"] = time_evaluation - time_train
         with open(path_evaluation + "history.json", "w+") as wfile:
-            json.dump(str(history.history), wfile)
+            json.dump(str(hist), wfile)
 
 
 
