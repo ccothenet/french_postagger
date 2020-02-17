@@ -67,6 +67,7 @@ def option_parser():
     parser.add_option("--dev_set", default="data/fr_partut-ud-dev.conllu")
     parser.add_option("--test_set", default="data/fr_partut-ud-test.conllu")
     parser.add_option("--eval_model", default="None")
+    parser.add_option("--model_type", default="direct", help="'direct' model or 'bigru' or 'bilstm'")
     (options, args) = parser.parse_args()
 
     return options

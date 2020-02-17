@@ -64,6 +64,7 @@ if __name__ == "__main__":
         hist = history.history
         hist["time_training"] = time_train - time_begin
         hist["time_evaluation"] = time_evaluation - time_train
+        hist["test_acc"] = score[1]
         with open(path_evaluation + "history.json", "w+") as wfile:
             json.dump(str(hist), wfile)
 

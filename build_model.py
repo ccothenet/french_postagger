@@ -14,14 +14,16 @@ def build_or_load_model(options, vocab_train):
     if options.reset_model or not os.path.isfile(
             options.model_dir + "model.pt"):
         model = build_model(embedding_path=options.embedding_path,
-                           nb_classes=18, maxlen=options.maxlen,
-                           vocab_size=len(vocab_train) + 1)
+                            model_type=options.model_type,
+                            nb_classes=18,
+                            maxlen=options.maxlen,
+                            vocab_size=len(vocab_train) + 1)
     else:
         model = load_model(options.model_dir + "model.pt")
     return model
 
 
-def build_model(embedding_path="None", nb_classes=18, maxlen=100, vocab_size=100000):
+def build_model(embedding_path="None", model_type="default", nb_classes=18, maxlen=100, vocab_size=100000):
     """
     Model with only a dense layer to evaluate the different embeddings
     :param embedding_path: string
@@ -37,12 +39,13 @@ def build_model(embedding_path="None", nb_classes=18, maxlen=100, vocab_size=100
 
     model = Sequential()
     if embedding_path == "None":
-        model.add(Embedding(vocab_size, 500, input_length=maxlen, trainable=True, mask_zero=True))
+        model.add(Embedding(vocab_size, 1000, input_length=maxlen, trainable=True, mask_zero=True))
     else:
         model.add(embedding.keras_embeddings(train_embeddings=False))
-    # model.add(Bidirectional(GRU(128, return_sequences=True)))
-    # model.add(Bidirectional(GRU(128, return_sequences=True)))
-    # model.add(Flatten(input_shape=[8, 20, 128]))
-    model.add(Dense(nb_classes, activation="softmax"))
+    if model_type=="bigru":
+        model.add(Bidirectional(GRU(500, return_sequences=True)))
+    elif model_type=="bilstm":
+        model.add(Bidirectional(LSTM(500, return_sequences=True)))'"# model.add(Flatten(input_shape=[8, 20, 128]))
+    model.add(Dense(nb_classe²s, activation="softmax"))
     model.compile(optimizer=optimizers.Adam(lr=0.1), loss="categorical_crossentropy", metrics=["accuracy"])
     return model
