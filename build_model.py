@@ -45,7 +45,8 @@ def build_model(embedding_path="None", model_type="default", nb_classes=18, maxl
     if model_type=="bigru":
         model.add(Bidirectional(GRU(500, return_sequences=True)))
     elif model_type=="bilstm":
-        model.add(Bidirectional(LSTM(500, return_sequences=True)))'"# model.add(Flatten(input_shape=[8, 20, 128]))
+        model.add(Bidirectional(LSTM(500, return_sequences=True)))
+    # model.add(Flatten(input_shape=[8, 20, 128]))
     model.add(Dense(nb_classe²s, activation="softmax"))
     model.compile(optimizer=optimizers.Adam(lr=0.1), loss="categorical_crossentropy", metrics=["accuracy"])
     return model
