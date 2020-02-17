@@ -1,8 +1,10 @@
 data/*
 UD_French-ParTUT/*
+UD_French-GSD/*
 embeddings/fr*
 embeddings/w2v*
 evaluations/*
 model/*
 output/*
 radam.py
+__pycache__/*
