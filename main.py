@@ -23,6 +23,7 @@ if __name__ == "__main__":
         model = build_or_load_model(options, vocab_train)
 
         path_evaluation = options.log_dir
+        print("path_evaluation", path_evaluation)
         if not os.path.isdir(path_evaluation):
             os.mkdir(path_evaluation)
 
@@ -81,15 +82,19 @@ if __name__ == "__main__":
         with open(options.output_dir + "options_dict.json", "r") as rfile:
             options_train = json.load(rfile)
 
-        model = load_model(options_train["model_dir"] + "model.pt")
-
+        if options.eval_model == "None":
+            model = load_model(options_train["model_dir"] + "model.pt")
+        else:
+            model = load_model(options.eval_model)
         # ############################################# #
         # ------------------EVALUATION----------------- #
         # ############################################# #
         if options.evaluate:
-            X_test, y_test = prepare_evaluation(options_train)
+            X_test, y_test = prepare_evaluation(options, options_train)
             score = model.evaluate(X_test, y_test, batch_size=8)
             print("Evaluation score : {}".format(score))
+            with open(options.log_dir + "evaluation_score_{}".format(options.test_set.split("/")[1].split(".")[0]), "w+") as wfile:
+                wfile.write("{}\n{}".format(score[0], score[1]))
 
 
 

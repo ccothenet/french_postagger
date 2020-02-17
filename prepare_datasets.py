@@ -58,10 +58,9 @@ def prepare_train(options):
     :return: datasets for train, dev and test, and train-set vocabulary
     """
     # 1 - Load CONLLU files (use get_data.sh to use them)
-    X_train, y_train, vocab_train = load_conllu_file(
-        "data/fr_partut-ud-train.conllu")
-    X_dev, y_dev, vocab_dev = load_conllu_file("data/fr_partut-ud-dev.conllu")
-    X_test, y_test, vocab_test = load_conllu_file("data/fr_partut-ud-test.conllu")
+    X_train, y_train, vocab_train = load_conllu_file(options.train_set)
+    X_dev, y_dev, vocab_dev = load_conllu_file(options.dev_set)
+    X_test, y_test, vocab_test = load_conllu_file(options.test_set)
 
     get_statistics(vocab_train, vocab_dev, vocab_test)
 
@@ -122,7 +121,7 @@ def prepare_train(options):
     return X_train, X_dev, X_test, y_train, y_dev, y_test, vocab_train
 
 
-def prepare_evaluation(options_train):
+def prepare_evaluation(options, options_train):
     """
     1 - Load CONLL-U files and vocabulary
     2 - Get indices of words in embeddings (pre-trained or not)
@@ -133,12 +132,12 @@ def prepare_evaluation(options_train):
     :return: X_test, y_test
     """
 
-    X_test, y_test, vocab_test = load_conllu_file("data/fr_partut-ud-test.conllu")
+    X_test, y_test, vocab_test = load_conllu_file(options.test_set)
 
     if options_train["embedding_path"] == "None":
         word_encoder = LabelEncoder()
         word_encoder.classes_ = np.load(
-            options.output_dir + "word_encoder.npy")
+            options_train["output_dir"] + "word_encoder.npy")
         X_test = [[o if o in word_encoder.classes_ else "<unk>" for o in sub] for
                   sub in X_test]
         X_test = np.array([word_encoder.transform(o) for o in X_test])

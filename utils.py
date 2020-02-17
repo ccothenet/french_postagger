@@ -63,6 +63,10 @@ def option_parser():
     parser.add_option("--evaluate", action="store_true")
     parser.add_option("--predict", action="store_true")
     parser.add_option("--str", help="string to predict. Only if predict is parsed", default="Je mange une pomme.")
+    parser.add_option("--train_set", default="data/fr_partut-ud-train.conllu")
+    parser.add_option("--dev_set", default="data/fr_partut-ud-dev.conllu")
+    parser.add_option("--test_set", default="data/fr_partut-ud-test.conllu")
+    parser.add_option("--eval_model", default="None")
     (options, args) = parser.parse_args()
 
     return options
