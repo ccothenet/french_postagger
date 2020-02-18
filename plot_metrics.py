@@ -11,7 +11,7 @@ for dir in os.listdir("evaluations/"):
         hist = rfile.read().replace("'", '"')
     dir_reformat = dir.replace("\uf00d", "")
     hist = json.loads(hist[1:-1])
-    dict_val_acc[dir_reformat] = hist["val_acc"]
+    dict_val_acc[dir_reformat] = hist["val_accuracy"]
     list_best = [max(o) for o in list(dict_val_acc.values())]
 
     for corpus in os.listdir("evaluations/{}".format(dir)):
